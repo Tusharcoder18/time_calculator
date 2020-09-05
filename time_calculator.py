@@ -1,6 +1,5 @@
 
-
-def add_time(start, duration, ):
+def calc_hour(hour1, hour2):
     time_format = {
         '1' : 1,
         '2' : 2,
@@ -27,16 +26,41 @@ def add_time(start, duration, ):
         '23' : 11,
         '24' : 12,
     }
+    if hour1 + hour2 > 24:
+        diff = hour2 % 24
+        if diff:
+            hour2 = diff
+        else:
+            hour2 = 12
+
+    result = time_format[str(hour1 + hour2)]
+
+    return result
+
+def calc_min(min1, min2, hour_result):
+    result = min1 + min2
+    if result > 60:
+        add = result // 60
+        hour_result += add
+        result -= 60
+        if len(str(result)) == 1:
+            result = '0' + str(result)
+    
+    return hour_result, result
+
+
+def add_time(start, duration, day = 'Funday'):
+
     time, end = start.split()
     hour1, min1 = map(int, time.split(':'))
     hour2, min2 = map(int, duration.split(':'))
 
-    hour_result = time_format[str(hour1 + hour2)]
-    min_result = min1 + min2
-    if min_result > 60:
-        add = min_result // 60
-        hour_result += add
-        min_result -= 60
+    hour_result = calc_hour(hour1, hour2)
+    hour_result, min_result = calc_min(min1, min2, hour_result)
+    
+    if sum([hour1, hour2]) >= 12 or hour_result >= 12:
+        if end == 'AM': end = 'PM'
+        elif end == 'PM': end = 'AM'
 
     print(str(hour_result) + ':' + str(min_result) + ' ' + end)
 
@@ -44,7 +68,7 @@ def add_time(start, duration, ):
 
 
 
-add_time("11:30 AM", "2:32")
+add_time("3:00 PM", "3:10")
 
 
 
