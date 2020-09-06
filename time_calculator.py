@@ -65,8 +65,27 @@ def add_time(start, duration, day = 'Funday'):
      
     result = str(hour_result) + ':' + str(min_result) + ' ' + end_result
 
+    if day != 'Funday':
+        days = [0, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        day = day.capitalize()
+        if round(hour2 / 24):
+            days_later = round(hour2 / 24)
+            if min1 + min2 > 60:
+                days_later += 1
+            index = days.index(day)
+            days_later += index
+            print(days_later)
+            day_result = days[days_later % 7]
+            result += f', {day_result}'
+        
+        else:
+            result += f', {day}' 
+
+
     if round(hour2 / 24):
         days_later = round(hour2 / 24)
+        if min1 + min2 > 60:
+            days_later += 1
         result += f' ({days_later} days later)'
     elif end == 'PM' and end_result == 'AM':
         result += ' (next day)'
@@ -75,7 +94,7 @@ def add_time(start, duration, day = 'Funday'):
 
 
 
-print(add_time("6:30 PM", "205:12"))
+print(add_time("8:16 PM", "466:02", "tuesday"))
 
 
 
