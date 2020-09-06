@@ -57,18 +57,25 @@ def add_time(start, duration, day = 'Funday'):
 
     hour_result = calc_hour(hour1, hour2)
     hour_result, min_result = calc_min(min1, min2, hour_result)
+    end_result = end
     
     if sum([hour1, hour2]) >= 12 or hour_result >= 12:
-        if end == 'AM': end = 'PM'
-        elif end == 'PM': end = 'AM'
+        if end == 'AM': end_result = 'PM'
+        elif end == 'PM': end_result = 'AM'
+     
+    result = str(hour_result) + ':' + str(min_result) + ' ' + end_result
 
-    print(str(hour_result) + ':' + str(min_result) + ' ' + end)
+    if round(hour2 / 24):
+        days_later = round(hour2 / 24)
+        result += f' ({days_later} days later)'
+    elif end == 'PM' and end_result == 'AM':
+        result += ' (next day)'
 
-    return 
+    return result
 
 
 
-add_time("3:00 PM", "3:10")
+print(add_time("6:30 PM", "205:12"))
 
 
 
