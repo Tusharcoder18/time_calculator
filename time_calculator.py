@@ -43,8 +43,8 @@ def calc_min(min1, min2, hour_result):
         add = result // 60
         hour_result += add
         result -= 60
-        if len(str(result)) == 1:
-            result = '0' + str(result)
+    if len(str(result)) == 1:
+        result = '0' + str(result)
     
     return hour_result, result
 
@@ -59,7 +59,7 @@ def add_time(start, duration, day = 'Funday'):
     hour_result, min_result = calc_min(min1, min2, hour_result)
     end_result = end
     
-    if sum([hour1, hour2]) >= 12 or hour_result >= 12:
+    if (hour1 + (hour2 % 24)) >= 12 or hour_result >= 12:
         if end == 'AM': end_result = 'PM'
         elif end == 'PM': end_result = 'AM'
      
@@ -68,27 +68,34 @@ def add_time(start, duration, day = 'Funday'):
     if day != 'Funday':
         days = [0, 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
         day = day.capitalize()
-        if round(hour2 / 24):
-            days_later = round(hour2 / 24)
+        if hour2 >= 24:
+            days_later = round((hour1+hour2) / 24)
             if min1 + min2 > 60:
                 days_later += 1
             index = days.index(day)
-            days_later += index
-            print(days_later)
-            day_result = days[days_later % 7]
+            day_result = days_later + index
+            if day_result == 7:
+                day_result = days[day_result]
+            else:
+                day_result = days[day_result % 7]
             result += f', {day_result}'
         
         else:
             result += f', {day}' 
 
 
-    if round(hour2 / 24):
-        days_later = round(hour2 / 24)
+    if hour2 >= 24:
+        days_later = round((hour1+hour2) / 24)
         if min1 + min2 > 60:
             days_later += 1
-        result += f' ({days_later} days later)'
-    elif end == 'PM' and end_result == 'AM':
+        if days_later == 1:
+            result += ' (next day)'
+        else:
+            result += f' ({days_later} days later)'
+    elif (end == 'PM' and end_result == 'AM'):
         result += ' (next day)'
+    # elif end == end_result and hour2 >= 24:
+    #     result += ' (next day)'
 
     return result
 
